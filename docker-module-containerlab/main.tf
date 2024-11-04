@@ -21,6 +21,7 @@ resource "docker_container" "ubuntu_container" {
   count = var.num_containers
   name = "ubuntu_ssh_${count.index}
   image = docker_image.ubuntu_ssh.latest
+}
 
 ports {
   internal = 22
@@ -42,5 +43,4 @@ provisioner "remote-exec" {
     user = "root"
     }
   }
-}
 

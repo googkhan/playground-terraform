@@ -3,7 +3,7 @@ terraform {
   required_providers {
     docker = {
       source  = "kreuzwerker/docker"
-      version = "~> 2.23.0"
+      version = "~> 2.23.1"
     }
   }
 }
@@ -30,11 +30,15 @@ resource "docker_container" "ubuntu_ssh_container" {
   name  = "ubuntu_ssh_${count.index}"
   image = docker_image.ubuntu.latest
 
-  ports {
-    internal = 22
-    external = 2200 + count.index
-  }
+  #  ports = ["${2200 + count.index}:22"]
 
+  dynamic "ports" {
+    for_each = [2200 + count.index]
+    content {
+      internal = 22
+      external = ports.value
+    }
+  }
   provisioner "remote-exec" {
     inline = [
       "apt-get update",
@@ -42,12 +46,13 @@ resource "docker_container" "ubuntu_ssh_container" {
       "mkdir -p /root/.ssh/",
       "echo '${local.ssh_public_key}' >> /root/.ssh/authorized_keys",
       "chmod 600 /root/.ssh/authorized_keys",
-      "systemctl enable --now ssh.service"
+      "/usr/sbin/sshd -D"
     ]
 
     connection {
       type = "docker"
       user = "root"
+      host = "localhost"
     }
   }
 }

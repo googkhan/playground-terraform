@@ -3,7 +3,7 @@
 
 provider "registry.opentofu.org/kreuzwerker/docker" {
   version     = "2.23.1"
-  constraints = "~> 2.23.0"
+  constraints = "~> 2.23.1"
   hashes = [
     "h1:0B1y4P21+k4/3KkVkDRjkmaQ2HYWnCD8EUMBCaoaudA=",
     "zh:075f591d3ef708cbdb94f31685c332b15622dd0d6a4eff7c36a49c43fe138523",

@@ -2,7 +2,7 @@
 terraform {
   required_providers {
     docker = {
-      source = "kreuzwerker/docker"
+      source  = "kreuzwerker/docker"
       version = "~> 2.23.0"
     }
   }
@@ -20,15 +20,15 @@ variable "num_containers" {
   default = 2
 }
 
-resource "docker_image" "ubuntu_ssh" {
+resource "docker_image" "ubuntu" {
   name         = "ubuntu:latest"
   keep_locally = true
 }
 
-resource "docker_image" "ubuntu_container" {
+resource "docker_container" "ubuntu_ssh_container" {
   count = var.num_containers
   name  = "ubuntu_ssh_${count.index}"
-  image = docker_image.ubuntu_ssh.latest
+  image = docker_image.ubuntu.latest
 
   ports {
     internal = 22
